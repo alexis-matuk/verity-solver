@@ -103,7 +103,7 @@ def generateCombinations():
                         # print(perm[0].name, perm[1].name, perm[2].name, enumToDetailedName(s1), enumToDetailedName(s2), enumToDetailedName(s3))
                         counter += 1
                         result.append([[perm[0], perm[1], perm[2]], [s1, s2, s3]])
-    print(counter)
+    print(counter, "combinations generated")
     return result
 
 
@@ -120,6 +120,18 @@ def getSame2dComponentsOf3dShapes(shape1, shape2):
         for y in shape2Comps:
             if x == y:
                 return x
+    return None
+
+def getWantedComponentOfShape(finalShape, shape1, shape2):
+    finalShapeComps = threeD_to_twoD[finalShape]
+    shape1Comps = threeD_to_twoD[shape1]
+    shape2Comps = threeD_to_twoD[shape2]
+    compsInFinalShape = [x for x in finalShapeComps if x in shape2Comps]
+    for x in compsInFinalShape:
+        if x in shape1Comps:
+            continue
+        else:
+            return x
     return None
 
 def getOfferableComponent(wantedShape, shape1):
@@ -174,14 +186,18 @@ def getCombinationSolution(combinationEntry):
             currentlySolvingFor2D = idx
             break
 
-    print("=========")
-    print("starting shape:", indexToNamedPosition(currentlySolvingFor2D))
+    #print("=========")
+    #print("starting shape:", indexToNamedPosition(currentlySolvingFor2D))
     while not isEntrySolved(insideTuple, outsideTuple):
         for idx, x in enumerate(outsideTuple):
+            if shapeIsSolved(insideTuple[currentlySolvingFor2D], outsideTuple[currentlySolvingFor2D]):
+                solvedInside[currentlySolvingFor2D] = True
+                currentlySolvingFor2D = (currentlySolvingFor2D + 1) % 2
+                break
             if idx == currentlySolvingFor2D or (solvedInside[idx] is True):
                 continue
             wantedSolutionShape = solution_to_twoD[insideTuple[currentlySolvingFor2D]]
-            wantedComponent = getSame2dComponentsOf3dShapes(wantedSolutionShape, x)
+            wantedComponent = getWantedComponentOfShape(wantedSolutionShape, outsideTuple[currentlySolvingFor2D], x)
             if wantedComponent is None:
                 continue
             #found a shape to swap with
@@ -204,9 +220,12 @@ if __name__ == '__main__':
     testEntry11 = [[TwoDShape.Circle, TwoDShape.Square, TwoDShape.Triangle],[ThreeDShape.Pyramid, ThreeDShape.Cylinder, ThreeDShape.Cylinder]]
     testEntry12 = [[TwoDShape.Circle, TwoDShape.Square, TwoDShape.Triangle],[ThreeDShape.Sphere, ThreeDShape.Pyramid, ThreeDShape.Cube]]
     testEntry13 = [[TwoDShape.Circle, TwoDShape.Square, TwoDShape.Triangle],[ThreeDShape.Sphere, ThreeDShape.Cube, ThreeDShape.Pyramid]]
+    testEntry26 = [[TwoDShape.Circle, TwoDShape.Square, TwoDShape.Triangle],[ThreeDShape.Prism, ThreeDShape.Sphere, ThreeDShape.Prism]]
+    testEntry134 = [[TwoDShape.Triangle, TwoDShape.Square, TwoDShape.Circle],[ThreeDShape.Prism, ThreeDShape.Prism, ThreeDShape.Sphere]]
 
     for idx, x in enumerate(combinationList):
         print(idx+1)
         getCombinationSolution(x)
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+    #getCombinationSolution(testEntry9)
+    #getCombinationSolution(testEntry26)
