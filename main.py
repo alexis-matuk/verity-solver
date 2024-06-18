@@ -1,7 +1,3 @@
-# This is a sample Python script.
-
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
 from enum import Enum
 from itertools import permutations
 from copy import deepcopy
@@ -100,7 +96,6 @@ def generateCombinations():
             for s2 in ThreeDShape:
                 for s3 in ThreeDShape:
                     if isCombinationSolvable(s1, s2, s3):
-                        # print(perm[0].name, perm[1].name, perm[2].name, enumToDetailedName(s1), enumToDetailedName(s2), enumToDetailedName(s3))
                         counter += 1
                         result.append([[perm[0], perm[1], perm[2]], [s1, s2, s3]])
     print(counter, "combinations generated")
@@ -221,24 +216,18 @@ def getCombinationSolution(combinationEntry, printSteps):
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
+    #testEntry9 = [[TwoDShape.Circle, TwoDShape.Square, TwoDShape.Triangle],[ThreeDShape.Pyramid, ThreeDShape.Sphere, ThreeDShape.Cube]]
+    #testEntry10 = [[TwoDShape.Circle, TwoDShape.Square, TwoDShape.Triangle],[ThreeDShape.Pyramid, ThreeDShape.Cube, ThreeDShape.Sphere]]
+    #testEntry11 = [[TwoDShape.Circle, TwoDShape.Square, TwoDShape.Triangle],[ThreeDShape.Pyramid, ThreeDShape.Cylinder, ThreeDShape.Cylinder]]
+    #testEntry12 = [[TwoDShape.Circle, TwoDShape.Square, TwoDShape.Triangle],[ThreeDShape.Sphere, ThreeDShape.Pyramid, ThreeDShape.Cube]]
+    #testEntry13 = [[TwoDShape.Circle, TwoDShape.Square, TwoDShape.Triangle],[ThreeDShape.Sphere, ThreeDShape.Cube, ThreeDShape.Pyramid]]
+    #testEntry26 = [[TwoDShape.Circle, TwoDShape.Square, TwoDShape.Triangle],[ThreeDShape.Prism, ThreeDShape.Sphere, ThreeDShape.Prism]]
+    #testEntry134 = [[TwoDShape.Triangle, TwoDShape.Square, TwoDShape.Circle],[ThreeDShape.Prism, ThreeDShape.Prism, ThreeDShape.Sphere]]
+    #testEntryFailed = [[TwoDShape.Square, TwoDShape.Circle, TwoDShape.Triangle],[ThreeDShape.Cylinder, ThreeDShape.Cone, ThreeDShape.Pyramid]]
+
     combinationList = generateCombinations()
-    # printCombinationMatrix(combinationList)
-    testEntry9 = [[TwoDShape.Circle, TwoDShape.Square, TwoDShape.Triangle],[ThreeDShape.Pyramid, ThreeDShape.Sphere, ThreeDShape.Cube]]
-    testEntry10 = [[TwoDShape.Circle, TwoDShape.Square, TwoDShape.Triangle],[ThreeDShape.Pyramid, ThreeDShape.Cube, ThreeDShape.Sphere]]
-    testEntry11 = [[TwoDShape.Circle, TwoDShape.Square, TwoDShape.Triangle],[ThreeDShape.Pyramid, ThreeDShape.Cylinder, ThreeDShape.Cylinder]]
-    testEntry12 = [[TwoDShape.Circle, TwoDShape.Square, TwoDShape.Triangle],[ThreeDShape.Sphere, ThreeDShape.Pyramid, ThreeDShape.Cube]]
-    testEntry13 = [[TwoDShape.Circle, TwoDShape.Square, TwoDShape.Triangle],[ThreeDShape.Sphere, ThreeDShape.Cube, ThreeDShape.Pyramid]]
-    testEntry26 = [[TwoDShape.Circle, TwoDShape.Square, TwoDShape.Triangle],[ThreeDShape.Prism, ThreeDShape.Sphere, ThreeDShape.Prism]]
-    testEntry134 = [[TwoDShape.Triangle, TwoDShape.Square, TwoDShape.Circle],[ThreeDShape.Prism, ThreeDShape.Prism, ThreeDShape.Sphere]]
-    testEntryFailed = [[TwoDShape.Square, TwoDShape.Circle, TwoDShape.Triangle],[ThreeDShape.Cylinder, ThreeDShape.Cone, ThreeDShape.Pyramid]]
-
-
     print("|Case | Inside left | Inside middle | Inside right | Outisde left | Outside middle | Outisde right | Steps|")
     print("|---------|---------|---------|---------|---------|---------|---------|---------|")
     for idx, x in enumerate(combinationList):
         steps = getCombinationSolution(x, False)
         print("|",idx+1,"|",getPrintableEntry(x), "|", steps, "|")
-
-
-    #getCombinationSolution(testEntry9)
-    #getCombinationSolution(testEntry26)
