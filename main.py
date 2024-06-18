@@ -173,6 +173,9 @@ def indexToNamedPosition(i):
             return "right"
 
 def getCombinationSolution(combinationEntry):
+    if not isCombinationSolvable(combinationEntry[1][0], combinationEntry[1][1], combinationEntry[1][2]):
+        print("Outside 3D shapes are incorrect, scenario is not solvable")
+        return
     insideTuple = combinationEntry[0]
     outsideTuple = combinationEntry[1]
     solvedInside = [False, False, False]
@@ -213,7 +216,7 @@ def getCombinationSolution(combinationEntry):
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    combinationList = generateCombinations()
+    #combinationList = generateCombinations()
     # printCombinationMatrix(combinationList)
     testEntry9 = [[TwoDShape.Circle, TwoDShape.Square, TwoDShape.Triangle],[ThreeDShape.Pyramid, ThreeDShape.Sphere, ThreeDShape.Cube]]
     testEntry10 = [[TwoDShape.Circle, TwoDShape.Square, TwoDShape.Triangle],[ThreeDShape.Pyramid, ThreeDShape.Cube, ThreeDShape.Sphere]]
@@ -222,10 +225,15 @@ if __name__ == '__main__':
     testEntry13 = [[TwoDShape.Circle, TwoDShape.Square, TwoDShape.Triangle],[ThreeDShape.Sphere, ThreeDShape.Cube, ThreeDShape.Pyramid]]
     testEntry26 = [[TwoDShape.Circle, TwoDShape.Square, TwoDShape.Triangle],[ThreeDShape.Prism, ThreeDShape.Sphere, ThreeDShape.Prism]]
     testEntry134 = [[TwoDShape.Triangle, TwoDShape.Square, TwoDShape.Circle],[ThreeDShape.Prism, ThreeDShape.Prism, ThreeDShape.Sphere]]
+    testEntryFailed = [[TwoDShape.Square, TwoDShape.Circle, TwoDShape.Triangle],[ThreeDShape.Cylinder, ThreeDShape.Cone, ThreeDShape.Pyramid]]
 
+    getCombinationSolution(testEntryFailed)
+
+    '''
     for idx, x in enumerate(combinationList):
         print(idx+1)
         getCombinationSolution(x)
+    '''
 
     #getCombinationSolution(testEntry9)
     #getCombinationSolution(testEntry26)
