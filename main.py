@@ -109,8 +109,10 @@ def generateCombinations():
 
 def printCombinationMatrix(combinationMatrix):
     for entry in combinationMatrix:
-        print(entry[0][0].name, entry[0][1].name, entry[0][2].name, entry[1][0].name, entry[1][1].name,
-              entry[1][2].name)
+        print(entry[0][0].name, entry[0][1].name, entry[0][2].name, entry[1][0].name, entry[1][1].name,entry[1][2].name)
+
+def getPrintableEntry(entry):
+    return entry[0][0].name +' | '+ entry[0][1].name +' | '+ entry[0][2].name +" | " + entry[1][0].name +' | '+ entry[1][1].name +' | '+ entry[1][2].name
 
 
 def getSame2dComponentsOf3dShapes(shape1, shape2):
@@ -168,29 +170,28 @@ def indexToNamedPosition(i):
         case 0:
             return "left"
         case 1:
-            return "mid"
+            return "middle"
         case 2:
             return "right"
 
-def getCombinationSolution(combinationEntry):
+def getCombinationSolution(combinationEntry, printSteps):
     if not isCombinationSolvable(combinationEntry[1][0], combinationEntry[1][1], combinationEntry[1][2]):
         print("Outside 3D shapes are incorrect, scenario is not solvable")
         return
     insideTuple = combinationEntry[0]
     outsideTuple = combinationEntry[1]
     solvedInside = [False, False, False]
+    solutionSteps = []
 
     currentlySolvingFor2D = 0
 
-    # choose starting shape with existing solution 2d shape for efficiency in movements
+    # choose starting shape with 2d component in solution for efficiency in movements
     for idx, threeDshape in enumerate(outsideTuple):
         sameComponents = getSame2dComponentsOf3dShapes(solution_to_twoD[insideTuple[idx]], threeDshape)
         if sameComponents is not None:
             currentlySolvingFor2D = idx
             break
 
-    #print("=========")
-    #print("starting shape:", indexToNamedPosition(currentlySolvingFor2D))
     while not isEntrySolved(insideTuple, outsideTuple):
         for idx, x in enumerate(outsideTuple):
             if shapeIsSolved(insideTuple[currentlySolvingFor2D], outsideTuple[currentlySolvingFor2D]):
@@ -206,17 +207,21 @@ def getCombinationSolution(combinationEntry):
             #found a shape to swap with
             offeredComponent = getOfferableComponent(solution_to_twoD[insideTuple[currentlySolvingFor2D]], outsideTuple[currentlySolvingFor2D])
             newCurrentlySolvingShape, newSwappedShape = swap2dComponents(outsideTuple[currentlySolvingFor2D], x, offeredComponent ,wantedComponent)
-            print("swapping", offeredComponent.name, "in", indexToNamedPosition(currentlySolvingFor2D), "with", wantedComponent.name, "in", indexToNamedPosition(idx))
+            if printSteps:
+                print("swapping", offeredComponent.name, "in", indexToNamedPosition(currentlySolvingFor2D), "with", wantedComponent.name, "in", indexToNamedPosition(idx))
             outsideTuple[currentlySolvingFor2D] = newCurrentlySolvingShape
             outsideTuple[idx] = newSwappedShape
+            swaps = [offeredComponent.name, indexToNamedPosition(currentlySolvingFor2D), wantedComponent.name,indexToNamedPosition(idx)]
+            solutionSteps.append(swaps)
             if shapeIsSolved(insideTuple[currentlySolvingFor2D], outsideTuple[currentlySolvingFor2D]):
                 solvedInside[currentlySolvingFor2D] = True
                 currentlySolvingFor2D = (currentlySolvingFor2D + 1) % 2
                 break
+    return solutionSteps
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    #combinationList = generateCombinations()
+    combinationList = generateCombinations()
     # printCombinationMatrix(combinationList)
     testEntry9 = [[TwoDShape.Circle, TwoDShape.Square, TwoDShape.Triangle],[ThreeDShape.Pyramid, ThreeDShape.Sphere, ThreeDShape.Cube]]
     testEntry10 = [[TwoDShape.Circle, TwoDShape.Square, TwoDShape.Triangle],[ThreeDShape.Pyramid, ThreeDShape.Cube, ThreeDShape.Sphere]]
@@ -227,13 +232,13 @@ if __name__ == '__main__':
     testEntry134 = [[TwoDShape.Triangle, TwoDShape.Square, TwoDShape.Circle],[ThreeDShape.Prism, ThreeDShape.Prism, ThreeDShape.Sphere]]
     testEntryFailed = [[TwoDShape.Square, TwoDShape.Circle, TwoDShape.Triangle],[ThreeDShape.Cylinder, ThreeDShape.Cone, ThreeDShape.Pyramid]]
 
-    getCombinationSolution(testEntryFailed)
 
-    '''
+    print("|Case | Inside left | Inside middle | Inside right | Outisde left | Outside middle | Outisde right | Steps|")
+    print("|---------|---------|---------|---------|---------|---------|---------|---------|")
     for idx, x in enumerate(combinationList):
-        print(idx+1)
-        getCombinationSolution(x)
-    '''
+        steps = getCombinationSolution(x, False)
+        print("|",idx+1,"|",getPrintableEntry(x), "|", steps, "|")
+
 
     #getCombinationSolution(testEntry9)
     #getCombinationSolution(testEntry26)
