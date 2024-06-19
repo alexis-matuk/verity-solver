@@ -96,6 +96,7 @@ def generateCombinations():
             for s2 in ThreeDShape:
                 for s3 in ThreeDShape:
                     if isCombinationSolvable(s1, s2, s3):
+                        #print(perm[0], perm[1], perm[2],s1, s2, s3)
                         counter += 1
                         result.append([[perm[0], perm[1], perm[2]], [s1, s2, s3]])
     print(counter, "combinations generated")
@@ -142,7 +143,7 @@ def getOfferableComponent(wantedShape, shape1):
         return x
 
 
-def swap2dComponents(shape1, shape2, twoDComponent1, twoDComponent2):
+def get3DshapesAfterDissection(shape1, shape2, twoDComponent1, twoDComponent2):
     localDict = deepcopy(threeD_to_twoD)
     shape1Comps = localDict[shape1]
     shape2Comps = localDict[shape2]
@@ -201,7 +202,7 @@ def getCombinationSolution(combinationEntry, printSteps):
                 continue
             #found a shape to swap with
             offeredComponent = getOfferableComponent(solution_to_twoD[insideTuple[currentlySolvingFor2D]], outsideTuple[currentlySolvingFor2D])
-            newCurrentlySolvingShape, newSwappedShape = swap2dComponents(outsideTuple[currentlySolvingFor2D], x, offeredComponent ,wantedComponent)
+            newCurrentlySolvingShape, newSwappedShape = get3DshapesAfterDissection(outsideTuple[currentlySolvingFor2D], x, offeredComponent ,wantedComponent)
             if printSteps:
                 print("swapping", offeredComponent.name, "in", indexToNamedPosition(currentlySolvingFor2D), "with", wantedComponent.name, "in", indexToNamedPosition(idx))
             outsideTuple[currentlySolvingFor2D] = newCurrentlySolvingShape
@@ -229,5 +230,6 @@ if __name__ == '__main__':
     print("|Case | Inside left | Inside middle | Inside right | Outisde left | Outside middle | Outisde right | Steps|")
     print("|---------|---------|---------|---------|---------|---------|---------|---------|")
     for idx, x in enumerate(combinationList):
+        printableEntry = getPrintableEntry(x)
         steps = getCombinationSolution(x, False)
-        print("|",idx+1,"|",getPrintableEntry(x), "|", steps, "|")
+        print("|",idx+1,"|",printableEntry, "|", steps, "|")
