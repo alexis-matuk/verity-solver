@@ -107,9 +107,11 @@ def printCombinationMatrix(combinationMatrix):
     for entry in combinationMatrix:
         print(entry[0][0].name, entry[0][1].name, entry[0][2].name, entry[1][0].name, entry[1][1].name,entry[1][2].name)
 
-def getPrintableEntry(entry):
+def getMarkdownEntry(entry):
     return entry[0][0].name +' | '+ entry[0][1].name +' | '+ entry[0][2].name +" | " + entry[1][0].name +' | '+ entry[1][1].name +' | '+ entry[1][2].name
 
+def getJsEntry(entry):
+    return ""+entry[0][0].name + entry[0][1].name + entry[0][2].name + entry[1][0].name + entry[1][1].name + entry[1][2].name+": "
 
 def getSame2dComponentsOf3dShapes(shape1, shape2):
     shape1Comps = threeD_to_twoD[shape1]
@@ -227,9 +229,24 @@ if __name__ == '__main__':
     #testEntryFailed = [[TwoDShape.Square, TwoDShape.Circle, TwoDShape.Triangle],[ThreeDShape.Cylinder, ThreeDShape.Cone, ThreeDShape.Pyramid]]
 
     combinationList = generateCombinations()
+    #Print mardkown table
+    '''
     print("|Case | Inside left | Inside middle | Inside right | Outisde left | Outside middle | Outisde right | Steps|")
     print("|---------|---------|---------|---------|---------|---------|---------|---------|")
     for idx, x in enumerate(combinationList):
-        printableEntry = getPrintableEntry(x)
+        printableEntry = getMarkdownEntry(x)
         steps = getCombinationSolution(x, False)
         print("|",idx+1,"|",printableEntry, "|", steps, "|")
+    '''
+
+    print(len(combinationList))
+    #Print js dictionary
+    print("solutionsMatrix: {")
+    for idx, x in enumerate(combinationList):
+        printableEntry = getJsEntry(x)
+        steps = getCombinationSolution(x, False)
+        if idx + 1 < len(combinationList):
+            print(printableEntry, steps, ",")
+        else:
+            print(printableEntry, steps, "")
+    print("}")
